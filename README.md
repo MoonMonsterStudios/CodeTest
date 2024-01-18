@@ -3,7 +3,7 @@
 The goal is to make this simple Tank game clear and very satisfying to play.  
 
 ## Things to Keep in mind  
-1. Log the hours you spend on the project, log the time for each task separately. Include time spent consulting online sources. Please log this in a spreadsheet that you include. 
+1. Log the hours you spend on the project, log the time for each task separately. Include time spent consulting online sources. Please log this in a **spreadsheet** that you include. 
 1. The test should take around 8 - 10 hours.
 1. You can use any package you want.
 
@@ -22,9 +22,6 @@ Your task is to make the game fun and satisfying to play. Change **ANYTHING** yo
 
 ### Fix Bugs
 1. When driving forwards and shooting the player shoots themselfs.
-
-### Feature
-1. Victory screen after winning 3 rounds
 
 ## Deliverables
 1. Zipped Unity project (including a windows PC Build and Time logs). 
