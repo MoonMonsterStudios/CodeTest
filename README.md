@@ -21,7 +21,7 @@ The project you deliver should fulfill these requirements.
 Your task is to make the game fun and satisfying to play. Change **ANYTHING** you want to change to accomplish this.
 
 ### Fix Bugs
-1. When driving forwards and shooting the player shoots themselfs.
+1. When driving forwards and shooting the player shoots themselves.
 
 ## Deliverables
 1. Zipped Unity project (including a windows PC Build and Time logs). 
