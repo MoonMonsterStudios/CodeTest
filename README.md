@@ -27,7 +27,7 @@ This can be gameplay changes/additions, balancing, particles, sounds...\
 Make it clear what you worked on exactly, you can do this in your timetracking log!
 
 ## Deadline
-Hand in within 30 days of when you received the test.\
+There is no strict deadline, but we would like you to hand in within 30 days of when you received the test.\
 If you don't have enough time in that period, you can ask for an extension from your contact person.
 
 ## Deliverables
