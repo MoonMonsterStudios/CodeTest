@@ -6,6 +6,7 @@ The goal is to improve the Tanks! game sample from Unity.
 1. Log the time you spend on the project, log the time for each task separately. Include time spent consulting online sources. Please log this in a **spreadsheet** that you include. 
 1. The test should take around 8 - 10 hours.
 1. You can use any unity asset store package you want. A tweening and two VFX packages are added already.
+1. The project uses Unity version 6000.3.6f1, but using any 6000.3 version should work just fine.
 
 ## Test Requirements  
 The project you deliver should fulfill the following requirements.  
@@ -24,6 +25,10 @@ The project you deliver should fulfill the following requirements.
 Your task is to make the game more fun and satisfying to play. Change **ANYTHING** you want to change to accomplish this.
 This can be gameplay changes/additions, balancing, particles, sounds...\
 Make it clear what you worked on exactly, you can do this in your timetracking log!
+
+## Deadline
+Hand in within 30 days of when you received the test.\
+If you don't have enough time in that period, you can ask for an extension from your contact person.
 
 ## Deliverables
 1. Zipped Unity project (including a windows PC Build and Time logs). 
