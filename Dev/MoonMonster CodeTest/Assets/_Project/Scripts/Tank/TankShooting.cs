@@ -5,6 +5,7 @@ namespace MoonMonster.Codetest
 {
     public class TankShooting : MonoBehaviour
     {
+        [SerializeField] private bool _lookAtMouse;
         [SerializeField, Required] private Rigidbody _shell;
         [SerializeField, Required] private Transform _fireTransform;
         [SerializeField, Required] private AudioSource _shootingAudio;
@@ -12,9 +13,7 @@ namespace MoonMonster.Codetest
         [SerializeField] private float _launchForce = 15f;
         [SerializeField] private float _fireDelay = 0.3f;
         [SerializeField, Required] private GameObject _turret;
-        [SerializeField] private float _angleOffset = 90f; 
-        
-        public bool LookAtMouse { get; set; }
+        [SerializeField] private float _angleOffset = 90f;
 
         private float _reloadCountdown;
         private bool _fired;
@@ -27,7 +26,7 @@ namespace MoonMonster.Codetest
 
         private void Update()
         {
-            if(LookAtMouse == true)
+            if(_lookAtMouse)
                 LookAtMousePosition();
             
             if (_fired)
