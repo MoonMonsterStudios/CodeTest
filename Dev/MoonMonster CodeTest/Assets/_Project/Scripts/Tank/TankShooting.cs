@@ -1,21 +1,21 @@
-﻿using System;
+﻿using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MoonMonster.Codetest
 {
     public class TankShooting : MonoBehaviour
     {
-        public bool LookAtMouse = false;
-        public Rigidbody Shell;
-        public Transform FireTransform;
-        public AudioSource ShootingAudio;
-        public AudioClip FireClip;
-        public float LaunchForce = 15f;
-        public float FireDelay = 0.1f;
-        public GameObject Turret;
-        public float AngleOffset = 90f; 
+        [SerializeField, Required] private Rigidbody _shell;
+        [SerializeField, Required] private Transform _fireTransform;
+        [SerializeField, Required] private AudioSource _shootingAudio;
+        [SerializeField, Required] private AudioClip _fireClip;
+        [SerializeField] private float _launchForce = 15f;
+        [SerializeField] private float _fireDelay = 0.3f;
+        [SerializeField, Required] private GameObject _turret;
+        [SerializeField] private float _angleOffset = 90f; 
         
+        public bool LookAtMouse { get; set; }
+
         private float _reloadCountdown;
         private bool _fired;
         private Camera _camera;
@@ -44,12 +44,12 @@ namespace MoonMonster.Codetest
             if (target == null)
                 return;
             
-            var dir = target.position - Turret.transform.position;
+            var dir = target.position - _turret.transform.position;
             dir.y = 0;
             dir.Normalize();
             
-            var angle = Mathf.Atan2(dir.z, dir.x) * Mathf.Rad2Deg - AngleOffset;
-            Turret.transform.rotation = Quaternion.AngleAxis(angle, Vector3.down);
+            var angle = Mathf.Atan2(dir.z, dir.x) * Mathf.Rad2Deg - _angleOffset;
+            _turret.transform.rotation = Quaternion.AngleAxis(angle, Vector3.down);
         }
 
         public void Fire()
@@ -58,15 +58,15 @@ namespace MoonMonster.Codetest
                 return;
             
             Rigidbody shellInstance =
-                Instantiate(Shell, FireTransform.position, FireTransform.rotation) as Rigidbody;
+                Instantiate(_shell, _fireTransform.position, _fireTransform.rotation) as Rigidbody;
 
-            shellInstance.linearVelocity = LaunchForce * FireTransform.forward;
+            shellInstance.linearVelocity = _launchForce * _fireTransform.forward;
 
-            ShootingAudio.clip = FireClip;
-            ShootingAudio.Play();
+            _shootingAudio.clip = _fireClip;
+            _shootingAudio.Play();
             
             _fired = true;
-            _reloadCountdown = FireDelay;
+            _reloadCountdown = _fireDelay;
         }
         
         private void LookAtMousePosition()
@@ -78,12 +78,12 @@ namespace MoonMonster.Codetest
             if (plane.Raycast(ray, out float distance))
             {
                 Vector3 targetPos = ray.GetPoint(distance);
-                var dir = targetPos - Turret.transform.position;
+                var dir = targetPos - _turret.transform.position;
                 dir.y = 0;
                 dir.Normalize();
             
-                var angle = Mathf.Atan2(dir.z, dir.x) * Mathf.Rad2Deg - AngleOffset;
-                Turret.transform.rotation = Quaternion.AngleAxis(angle, Vector3.down);
+                var angle = Mathf.Atan2(dir.z, dir.x) * Mathf.Rad2Deg - _angleOffset;
+                _turret.transform.rotation = Quaternion.AngleAxis(angle, Vector3.down);
             }
         }
     }

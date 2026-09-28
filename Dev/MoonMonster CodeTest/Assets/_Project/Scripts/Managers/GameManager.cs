@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,18 +8,17 @@ namespace MoonMonster.Codetest
 {
     public class GameManager : MonoBehaviour
     {
-        public int NumRoundsToWin = 5;
-        public float StartDelay = 3f;
-        public float EndDelay = 3f;
-        public CameraControl CameraControl;
-        public Text MessageText;
-        public GameObject PlayerTankPrefab;
-        public GameObject AITankPrefab;
-        public TankManager[] PlayerTanks;
-        public TankManager[] AITanks;
+        [SerializeField] private int _numRoundsToWin = 3;
+        [SerializeField] private float _startDelay = 1;
+        [SerializeField] private float _endDelay = 3;
+        [SerializeField, Required] private CameraControl _cameraControl;
+        [SerializeField, Required] private Text _messageText;
+        [SerializeField, Required] private GameObject _playerTankPrefab;
+        [SerializeField, Required] private GameObject _aiTankPrefab;
+        [SerializeField] private TankManager[] _playerTanks;
+        [SerializeField] private TankManager[] _aiTanks;
         
-        private int _roundNumber;
-        
+        private int _roundNumber;        
         private WaitForSeconds _startWait;
         private WaitForSeconds _endWait;
         private TankManager _roundWinner;
@@ -26,8 +26,8 @@ namespace MoonMonster.Codetest
 
         private void Start()
         {
-            _startWait = new WaitForSeconds(StartDelay);
-            _endWait = new WaitForSeconds(EndDelay);
+            _startWait = new WaitForSeconds(_startDelay);
+            _endWait = new WaitForSeconds(_endDelay);
 
             SpawnPlayerTanks();
             SpawnAITanks();
@@ -38,38 +38,36 @@ namespace MoonMonster.Codetest
 
         private void SpawnPlayerTanks()
         {
-            for (int i = 0; i < PlayerTanks.Length; i++)
+            for (int i = 0; i < _playerTanks.Length; i++)
             {
-                PlayerTanks[i].Instance =
-                    Instantiate(PlayerTankPrefab, PlayerTanks[i].SpawnPoint.position, PlayerTanks[i].SpawnPoint.rotation) as
-                        GameObject;
-                PlayerTanks[i].TankNumber = i + 1;
-                PlayerTanks[i].Setup();
+                _playerTanks[i].Instance =
+                    Instantiate(_playerTankPrefab, _playerTanks[i].SpawnPoint.position, _playerTanks[i].SpawnPoint.rotation);
+                _playerTanks[i].TankNumber = i + 1;
+                _playerTanks[i].Setup();
             }
         }
         
         private void SpawnAITanks()
         {
-            for (int i = 0; i < AITanks.Length; i++)
+            for (int i = 0; i < _aiTanks.Length; i++)
             {
-                AITanks[i].Instance =
-                    Instantiate(AITankPrefab, AITanks[i].SpawnPoint.position, AITanks[i].SpawnPoint.rotation) as
-                        GameObject;
-                AITanks[i].TankNumber = -1;
-                AITanks[i].Setup();
+                _aiTanks[i].Instance =
+                    Instantiate(_aiTankPrefab, _aiTanks[i].SpawnPoint.position, _aiTanks[i].SpawnPoint.rotation);
+                _aiTanks[i].TankNumber = -1;
+                _aiTanks[i].Setup();
             }
         }
 
         private void SetCameraTargets()
         {
-            Transform[] targets = new Transform[PlayerTanks.Length];
+            Transform[] targets = new Transform[_playerTanks.Length];
 
             for (int i = 0; i < targets.Length; i++)
             {
-                targets[i] = PlayerTanks[i].Instance.transform;
+                targets[i] = _playerTanks[i].Instance.transform;
             }
 
-            CameraControl.Targets = targets;
+            _cameraControl.Targets = targets;
         }
 
         private IEnumerator GameLoop()
@@ -95,10 +93,10 @@ namespace MoonMonster.Codetest
             ResetAllTanks();
             DisableTankControl();
 
-            CameraControl.SetStartPositionAndSize();
+            _cameraControl.SetStartPositionAndSize();
 
             _roundNumber++;
-            MessageText.text = "ROUND " + _roundNumber;
+            _messageText.text = "ROUND " + _roundNumber;
 
             yield return _startWait;
         }
@@ -107,7 +105,7 @@ namespace MoonMonster.Codetest
         {
             EnableTankControl();
 
-            MessageText.text = string.Empty;
+            _messageText.text = string.Empty;
 
             while (!OneTankLeft() && !AllPlayersDied())
             {
@@ -125,7 +123,7 @@ namespace MoonMonster.Codetest
             
             if (_roundWinner == null)
             {
-                foreach (var tank in AITanks)
+                foreach (var tank in _aiTanks)
                 {
                     tank.Wins++;
                     _roundWinner = tank;
@@ -137,7 +135,7 @@ namespace MoonMonster.Codetest
             _gameWinner = GetGameWinner();
 
             string message = EndMessage();
-            MessageText.text = message;
+            _messageText.text = message;
 
             yield return _endWait;
         }
@@ -146,15 +144,15 @@ namespace MoonMonster.Codetest
         {
             int numTanksLeft = 0;
 
-            for (int i = 0; i < PlayerTanks.Length; i++)
+            for (int i = 0; i < _playerTanks.Length; i++)
             {
-                if (PlayerTanks[i].Instance.activeSelf)
+                if (_playerTanks[i].Instance.activeSelf)
                     numTanksLeft++;
             }
             
-            for (int i = 0; i < AITanks.Length; i++)
+            for (int i = 0; i < _aiTanks.Length; i++)
             {
-                if (AITanks[i].Instance.activeSelf)
+                if (_aiTanks[i].Instance.activeSelf)
                     numTanksLeft++;
             }
 
@@ -165,9 +163,9 @@ namespace MoonMonster.Codetest
         {
             int numTanksLeft = 0;
 
-            for (int i = 0; i < PlayerTanks.Length; i++)
+            for (int i = 0; i < _playerTanks.Length; i++)
             {
-                if (PlayerTanks[i].Instance.activeSelf)
+                if (_playerTanks[i].Instance.activeSelf)
                     numTanksLeft++;
             }
 
@@ -176,10 +174,10 @@ namespace MoonMonster.Codetest
 
         private TankManager GetRoundWinner()
         {
-            for (int i = 0; i < PlayerTanks.Length; i++)
+            for (int i = 0; i < _playerTanks.Length; i++)
             {
-                if (PlayerTanks[i].Instance.activeSelf)
-                    return PlayerTanks[i];
+                if (_playerTanks[i].Instance.activeSelf)
+                    return _playerTanks[i];
             }
             
             return null;
@@ -187,16 +185,16 @@ namespace MoonMonster.Codetest
 
         private TankManager GetGameWinner()
         {
-            for (int i = 0; i < PlayerTanks.Length; i++)
+            for (int i = 0; i < _playerTanks.Length; i++)
             {
-                if (PlayerTanks[i].Wins == NumRoundsToWin)
-                    return PlayerTanks[i];
+                if (_playerTanks[i].Wins == _numRoundsToWin)
+                    return _playerTanks[i];
             }
 
-            for (int i = 0; i < AITanks.Length; i++)
+            for (int i = 0; i < _aiTanks.Length; i++)
             {
-                if (AITanks[i].Wins == NumRoundsToWin)
-                    return AITanks[i];
+                if (_aiTanks[i].Wins == _numRoundsToWin)
+                    return _aiTanks[i];
             }
             
             return null;
@@ -211,12 +209,12 @@ namespace MoonMonster.Codetest
 
             message += "\n\n\n\n";
 
-            for (int i = 0; i < PlayerTanks.Length; i++)
+            for (int i = 0; i < _playerTanks.Length; i++)
             {
-                message += PlayerTanks[i].ColoredPlayerText + ": " + PlayerTanks[i].Wins + " WINS\n";
+                message += _playerTanks[i].ColoredPlayerText + ": " + _playerTanks[i].Wins + " WINS\n";
             }
-            if(AITanks.Length > 0)
-                message += AITanks[0].ColoredPlayerText + ": " + AITanks[0].Wins + " WINS\n";
+            if(_aiTanks.Length > 0)
+                message += _aiTanks[0].ColoredPlayerText + ": " + _aiTanks[0].Wins + " WINS\n";
 
             if (_gameWinner != null)
                 message = _gameWinner.ColoredPlayerText + " WINS THE GAME!";
@@ -226,40 +224,40 @@ namespace MoonMonster.Codetest
 
         private void ResetAllTanks()
         {
-            for (int i = 0; i < PlayerTanks.Length; i++)
+            for (int i = 0; i < _playerTanks.Length; i++)
             {
-                PlayerTanks[i].Reset();
+                _playerTanks[i].Reset();
             }
             
-            for (int i = 0; i < AITanks.Length; i++)
+            for (int i = 0; i < _aiTanks.Length; i++)
             {
-                AITanks[i].Reset();
+                _aiTanks[i].Reset();
             }
         }
 
         private void EnableTankControl()
         {
-            for (int i = 0; i < PlayerTanks.Length; i++)
+            for (int i = 0; i < _playerTanks.Length; i++)
             {
-                PlayerTanks[i].EnableControl();
+                _playerTanks[i].EnableControl();
             }
             
-            for (int i = 0; i < AITanks.Length; i++)
+            for (int i = 0; i < _aiTanks.Length; i++)
             {
-                AITanks[i].EnableControl();
+                _aiTanks[i].EnableControl();
             }
         }
 
         private void DisableTankControl()
         {
-            for (int i = 0; i < PlayerTanks.Length; i++)
+            for (int i = 0; i < _playerTanks.Length; i++)
             {
-                PlayerTanks[i].DisableControl();
+                _playerTanks[i].DisableControl();
             }
             
-            for (int i = 0; i < AITanks.Length; i++)
+            for (int i = 0; i < _aiTanks.Length; i++)
             {
-                AITanks[i].DisableControl();
+                _aiTanks[i].DisableControl();
             }
         }
     }

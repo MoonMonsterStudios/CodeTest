@@ -1,76 +1,69 @@
-﻿using UnityEngine;
+﻿using NaughtyAttributes;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace MoonMonster.Codetest
 {
     public class TankHealth : MonoBehaviour
     {
-        public float StartingHealth = 100f;               
-        public Slider Slider;                             
-        public Image FillImage;                           
-        public Color FullHealthColor = Color.green;       
-        public Color ZeroHealthColor = Color.red;         
-        public GameObject ExplosionPrefab;                
-        
-        
-        private AudioSource _explosionAudio;               
-        private ParticleSystem _explosionParticles;        
-        private float _currentHealth;                      
-        private bool _dead;                                
+        [SerializeField] private float _startingHealth = 100f;
+        [SerializeField, Required] private Slider _slider;
+        [SerializeField, Required] private Image _fillImage;
+        [SerializeField] private Color _fullHealthColor = Color.green;
+        [SerializeField] private Color _zeroHealthColor = Color.red;
+        [SerializeField, Required] private GameObject _explosionPrefab;
 
+        private AudioSource _explosionAudio;
+        private ParticleSystem _explosionParticles;
+        private float _currentHealth;
+        private bool _dead;
 
-        private void Awake ()
+        private void Awake()
         {
-            _explosionParticles = Instantiate (ExplosionPrefab).GetComponent<ParticleSystem> ();
-
-            _explosionAudio = _explosionParticles.GetComponent<AudioSource> ();
-
-            _explosionParticles.gameObject.SetActive (false);
+            _explosionParticles = Instantiate(_explosionPrefab).GetComponent<ParticleSystem>();
+            _explosionAudio = _explosionParticles.GetComponent<AudioSource>();
+            _explosionParticles.gameObject.SetActive(false);
         }
-
 
         private void OnEnable()
         {
-            _currentHealth = StartingHealth;
+            _currentHealth = _startingHealth;
             _dead = false;
 
             SetHealthUI();
         }
 
-
-        public void TakeDamage (float amount)
+        public void TakeDamage(float amount)
         {
             _currentHealth -= amount;
 
-            SetHealthUI ();
+            SetHealthUI();
 
             if (_currentHealth <= 0f && !_dead)
             {
-                OnDeath ();
+                OnDeath();
             }
         }
 
-
-        private void SetHealthUI ()
+        private void SetHealthUI()
         {
-            Slider.value = _currentHealth;
+            _slider.value = _currentHealth;
 
-            FillImage.color = Color.Lerp (ZeroHealthColor, FullHealthColor, _currentHealth / StartingHealth);
+            _fillImage.color = Color.Lerp(_zeroHealthColor, _fullHealthColor, _currentHealth / _startingHealth);
         }
 
-
-        private void OnDeath ()
+        private void OnDeath()
         {
             _dead = true;
 
             _explosionParticles.transform.position = transform.position;
-            _explosionParticles.gameObject.SetActive (true);
+            _explosionParticles.gameObject.SetActive(true);
 
-            _explosionParticles.Play ();
+            _explosionParticles.Play();
 
             _explosionAudio.Play();
 
-            gameObject.SetActive (false);
+            gameObject.SetActive(false);
         }
     }
 }

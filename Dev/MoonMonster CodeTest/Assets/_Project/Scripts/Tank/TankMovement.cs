@@ -1,31 +1,31 @@
-﻿using UnityEngine;
+﻿using NaughtyAttributes;
+using UnityEngine;
 
 namespace MoonMonster.Codetest
 {
     public class TankMovement : MonoBehaviour
-    {         
-        public float Speed = 12f;                
-        public float TurnSpeed = 180f;           
-        public AudioSource MovementAudio;        
-        public AudioClip EngineIdling;           
-        public AudioClip EngineDriving;          
-		public float PitchRange = 0.2f;          
-        public GameObject TankBody;
+    {
+        [SerializeField] private float _speed = 12f;
+        [SerializeField] private float _turnSpeed = 180f;
+        [SerializeField, Required] private AudioSource _movementAudio;
+        [SerializeField, Required] private AudioClip _engineIdling;
+        [SerializeField, Required] private AudioClip _engineDriving;
+        [SerializeField] private float _pitchRange = 0.2f;
+        [SerializeField, Required] private GameObject _tankBody;
+        [SerializeField, Required] private Rigidbody _rigidbody;
 
-        private Rigidbody _rigidbody;
-        private float _verticalInputValue;        
+        private float _verticalInputValue;
         private float _horizontalInputValue;
         private float _originalPitch;
         private ParticleSystem[] _particleSystems;
         private Camera _camera;
-        
-        private void Awake ()
+
+        private void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody> ();
             _camera = Camera.main;
         }
 
-        private void OnEnable ()
+        private void OnEnable()
         {
             _rigidbody.isKinematic = false;
 
@@ -38,78 +38,78 @@ namespace MoonMonster.Codetest
                 _particleSystems[i].Play();
             }
         }
-        
-        private void OnDisable ()
+
+        private void OnDisable()
         {
             _rigidbody.isKinematic = true;
 
-            for(int i = 0; i < _particleSystems.Length; ++i)
+            for (int i = 0; i < _particleSystems.Length; ++i)
             {
                 _particleSystems[i].Stop();
             }
         }
-        
-        private void Start ()
+
+        private void Start()
         {
-            _originalPitch = MovementAudio.pitch;
+            _originalPitch = _movementAudio.pitch;
         }
-        
-        private void Update ()
+
+        private void Update()
         {
-            EngineAudio ();
+            EngineAudio();
         }
-        
+
         public void SetMoveInput(float movement, float turn)
         {
             _verticalInputValue = movement;
             _horizontalInputValue = turn;
         }
-        
-        private void EngineAudio ()
+
+        private void EngineAudio()
         {
-            if (Mathf.Abs (_verticalInputValue) < 0.1f && Mathf.Abs (_horizontalInputValue) < 0.1f)
+            if (Mathf.Abs(_verticalInputValue) < 0.1f && Mathf.Abs(_horizontalInputValue) < 0.1f)
             {
-                if (MovementAudio.clip == EngineDriving)
+                if (_movementAudio.clip == _engineDriving)
                 {
-                    MovementAudio.clip = EngineIdling;
-                    MovementAudio.pitch = Random.Range (_originalPitch - PitchRange, _originalPitch + PitchRange);
-                    MovementAudio.Play ();
+                    _movementAudio.clip = _engineIdling;
+                    _movementAudio.pitch = Random.Range(_originalPitch - _pitchRange, _originalPitch + _pitchRange);
+                    _movementAudio.Play();
                 }
             }
             else
             {
-                if (MovementAudio.clip == EngineIdling)
+                if (_movementAudio.clip == _engineIdling)
                 {
-                    MovementAudio.clip = EngineDriving;
-                    MovementAudio.pitch = Random.Range(_originalPitch - PitchRange, _originalPitch + PitchRange);
-                    MovementAudio.Play();
+                    _movementAudio.clip = _engineDriving;
+                    _movementAudio.pitch = Random.Range(_originalPitch - _pitchRange, _originalPitch + _pitchRange);
+                    _movementAudio.Play();
                 }
             }
         }
-        
-        private void FixedUpdate ()
+
+        private void FixedUpdate()
         {
-            Move ();
+            Move();
         }
-        
-        private void Move ()
+
+        private void Move()
         {
-            if(_verticalInputValue == 0 && _horizontalInputValue == 0)
+            if (_verticalInputValue == 0 && _horizontalInputValue == 0)
                 return;
-            
+
             var forward = _camera.transform.forward;
             var right = _camera.transform.right;
             forward.y = 0f;
             right.y = 0f;
             forward.Normalize();
             right.Normalize();
-            
-            Vector3 movement = (_verticalInputValue * forward + _horizontalInputValue * right) * (Speed * Time.fixedDeltaTime);
+
+            Vector3 movement = (_verticalInputValue * forward + _horizontalInputValue * right) * (_speed * Time.fixedDeltaTime);
 
             _rigidbody.MovePosition(_rigidbody.position + movement);
-            
-            TankBody.transform.forward = Vector3.MoveTowards(TankBody.transform.forward, movement.normalized,
-                TurnSpeed * Time.fixedDeltaTime);
+
+            _tankBody.transform.forward = Vector3.MoveTowards(_tankBody.transform.forward, movement.normalized,
+                _turnSpeed * Time.fixedDeltaTime);
         }
     }
 }

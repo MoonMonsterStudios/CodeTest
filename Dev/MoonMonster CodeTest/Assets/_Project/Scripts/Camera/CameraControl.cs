@@ -4,42 +4,37 @@ namespace MoonMonster.Codetest
 {
     public class CameraControl : MonoBehaviour
     {
-        public float DampTime = 0.2f;                
-        public float ScreenEdgeBuffer = 4f;          
-        public float MinSize = 6.5f;                 
-        [HideInInspector] public Transform[] Targets;
+        [SerializeField] private float _dampTime = 0.2f;
+        [SerializeField] private float _screenEdgeBuffer = 8;
+        [SerializeField] private float _minSize = 13;
 
+        public Transform[] Targets { get; set; }
 
-        private Camera _camera;                       
-        private float _zoomSpeed;                     
-        private Vector3 _moveVelocity;                
-        private Vector3 _desiredPosition;             
+        private Camera _camera;
+        private Vector3 _moveVelocity;
+        private Vector3 _desiredPosition;
 
-
-        private void Awake ()
+        private void Awake()
         {
-            _camera = GetComponentInChildren<Camera> ();
+            _camera = GetComponentInChildren<Camera>();
         }
 
-
-        private void FixedUpdate ()
+        private void FixedUpdate()
         {
-            Move ();
-            Zoom ();
+            Move();
+            Zoom();
         }
 
-
-        private void Move ()
+        private void Move()
         {
-            FindAveragePosition ();
+            FindAveragePosition();
 
-            transform.position = Vector3.SmoothDamp(transform.position, _desiredPosition, ref _moveVelocity, DampTime);
+            transform.position = Vector3.SmoothDamp(transform.position, _desiredPosition, ref _moveVelocity, _dampTime);
         }
 
-
-        private void FindAveragePosition ()
+        private void FindAveragePosition()
         {
-            Vector3 averagePos = new Vector3 ();
+            Vector3 averagePos = new Vector3();
             int numTargets = 0;
 
             for (int i = 0; i < Targets.Length; i++)
@@ -59,18 +54,16 @@ namespace MoonMonster.Codetest
             _desiredPosition = averagePos;
         }
 
-
-        private void Zoom ()
+        private void Zoom()
         {
             float requiredSize = FindRequiredSize();
-            _camera.orthographicSize = Mathf.SmoothDamp (_camera.orthographicSize, requiredSize, ref _zoomSpeed, DampTime);
+            float zoomSpeed = 0;
+            _camera.orthographicSize = Mathf.SmoothDamp(_camera.orthographicSize, requiredSize, ref zoomSpeed, _dampTime);
         }
 
-
-        private float FindRequiredSize ()
+        private float FindRequiredSize()
         {
             Vector3 desiredLocalPos = transform.InverseTransformPoint(_desiredPosition);
-
             float size = 0f;
 
             for (int i = 0; i < Targets.Length; i++)
@@ -79,28 +72,24 @@ namespace MoonMonster.Codetest
                     continue;
 
                 Vector3 targetLocalPos = transform.InverseTransformPoint(Targets[i].position);
-
                 Vector3 desiredPosToTarget = targetLocalPos - desiredLocalPos;
 
                 size = Mathf.Max(size, Mathf.Abs(desiredPosToTarget.y));
-
                 size = Mathf.Max(size, Mathf.Abs(desiredPosToTarget.x) / _camera.aspect);
             }
 
-            size += ScreenEdgeBuffer;
-
-            size = Mathf.Max (size, MinSize);
+            size += _screenEdgeBuffer;
+            size = Mathf.Max(size, _minSize);
 
             return size;
         }
 
-
-        public void SetStartPositionAndSize ()
+        public void SetStartPositionAndSize()
         {
-            FindAveragePosition ();
+            FindAveragePosition();
 
             transform.position = _desiredPosition;
-            _camera.orthographicSize = FindRequiredSize ();
+            _camera.orthographicSize = FindRequiredSize();
         }
     }
 }

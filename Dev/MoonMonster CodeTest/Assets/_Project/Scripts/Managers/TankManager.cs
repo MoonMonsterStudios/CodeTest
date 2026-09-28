@@ -31,14 +31,12 @@ namespace MoonMonster.Codetest
             if(_playerInput)
                 _playerInput.PlayerNumber = TankNumber;
             if(_aiController)
-                _aiController.Target = Object.FindObjectOfType<PlayerInput>().transform;
+                _aiController.Target = Object.FindFirstObjectByType<PlayerInput>().transform;
 
             if(_playerInput)
                 ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(TankColor) + ">PLAYER " + TankNumber + "</color>";
             else if(_aiController)
-            {
                 ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(TankColor) + ">AI</color>";
-            }
 
             MeshRenderer[] renderers = Instance.GetComponentsInChildren<MeshRenderer>();
 

@@ -1,25 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace MoonMonster.Codetest
 {
     public class PlayerInput : MonoBehaviour
     {
-        public int PlayerNumber = 1; 
-        private TankMovement _movement;
-        private TankShooting _shooting;
+        [SerializeField, Required] private TankMovement _movement;
+        [SerializeField, Required] private TankShooting _shooting;
 
-        
-        private string _movementAxisName;         
-        private string _turnAxisName;    
+        public int PlayerNumber { get; set; }
+
+        private string _movementAxisName;
+        private string _turnAxisName;
         private string _fireButtonName;
         
         void Start()
-        {
-            _movement = gameObject.GetComponent<TankMovement>();
-            _shooting = gameObject.GetComponent<TankShooting>();
-            
+        {            
             _movementAxisName = "Vertical" + PlayerNumber;
             _turnAxisName = "Horizontal" + PlayerNumber;
             _fireButtonName = "Fire" + PlayerNumber;
@@ -39,5 +35,4 @@ namespace MoonMonster.Codetest
             }
         }
     }
-
 }

@@ -1,31 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace MoonMonster.Codetest
 {
     public class AIController : MonoBehaviour
     {
-        public float AggressionDistance = 15;
-
-        private TankShooting _shooting;
-        
-        private string _movementAxisName;
-        private string _turnAxisName;
-        private string _fireButtonName;
+        [SerializeField, Required] private TankShooting _shooting;
+        [SerializeField] private float _aggressionDistance = 15;
 
         public Transform Target { get; set; }
-        
-        void Start()
-        {
-            _shooting = gameObject.GetComponent<TankShooting>();
-        }
         
         void Update()
         {
             _shooting.LookAtTarget(Target);
             
-            if(Vector3.Distance(transform.position, Target.position) < AggressionDistance)
+            if(Vector3.Distance(transform.position, Target.position) < _aggressionDistance)
             {
                 _shooting.Fire();
             }

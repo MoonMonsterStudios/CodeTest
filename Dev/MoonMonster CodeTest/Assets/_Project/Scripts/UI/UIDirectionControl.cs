@@ -4,8 +4,6 @@ namespace MoonMonster.Codetest
 {
     public class UIDirectionControl : MonoBehaviour
     {
-        public bool UseRelativeRotation = true;       
-
         private Quaternion _relativeRotation;
         
         private void Start ()
@@ -15,8 +13,7 @@ namespace MoonMonster.Codetest
         
         private void Update ()
         {
-            if (UseRelativeRotation)
-                transform.rotation = _relativeRotation;
+            transform.rotation = _relativeRotation;
         }
     }
 }
