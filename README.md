@@ -5,7 +5,7 @@ The goal is to improve the Tanks! game sample from Unity.
 ## Things to Keep in mind  
 1. Log the time you spend on the project, log the time for each task separately. Include time spent consulting online sources. Please log this in a **spreadsheet** that you include. 
 1. The test should take around 8 - 10 hours.
-1. You can use any unity asset store package you want. There's a few included already.
+1. You can use any unity asset store package you want. A tweening and two VFX packages are added already.
 
 ## Test Requirements  
 The project you deliver should fulfill the following requirements.  
