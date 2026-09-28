@@ -17,13 +17,13 @@ The project you deliver should fulfill the following requirements.
     - A weapon of your choice!
 1. Current weapon can be swapped with the 1, 2 & 3 keys and by scrolling the mouse wheel
 
+### Fix Bugs
+1. When driving forwards and shooting, the player shoots themselves.
+
 ### Polish gameplay
 Your task is to make the game more fun and satisfying to play. Change **ANYTHING** you want to change to accomplish this.
 This can be gameplay changes/additions, balancing, particles, sounds...\
 Make it clear what you worked on exactly, you can do this in your timetracking log!
-
-### Fix Bugs
-1. When driving forwards and shooting, the player shoots themselves.
 
 ## Deliverables
 1. Zipped Unity project (including a windows PC Build and Time logs). 
